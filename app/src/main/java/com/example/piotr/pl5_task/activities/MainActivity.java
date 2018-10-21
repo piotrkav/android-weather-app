@@ -1,23 +1,22 @@
 package com.example.piotr.pl5_task.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.example.piotr.pl5_task.R;
-import com.example.piotr.pl5_task.apixu.WeatherTask;
-import com.example.piotr.pl5_task.entity.Weather;
+import com.example.piotr.pl5_task.consts.UtilsHelper;
+import com.example.piotr.pl5_task.fragment.ErrorFragment;
 import com.example.piotr.pl5_task.fragment.WeatherFragment;
-
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ErrorFragment.OnRetryClickListener{
 
-    private Weather weather;
     private final String WEATHER_FRAGMENT_TAG = "weatherFragment";
+    private final String ERROR_FRAGMENT_TAG = "errorFragment";
+
     @BindView(R.id.weather_loading_progress)
     public
     ProgressBar progressBar;
@@ -26,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout container;
 
     private WeatherFragment weatherFragment;
-    private String cityName;
+    private ErrorFragment errorFragment;
+    private String cityName = "Porto";
 
     public MainActivity() {
     }
@@ -45,16 +45,25 @@ public class MainActivity extends AppCompatActivity {
 //
 //        System.out.println(weather.getForecast().toString());
 //
-}
+    }
+
     private void attachFragment() {
-      //  if (!Util.isNetworkAvailable(this)) {
-      //      errorMessageFragment = ErrorMessageFragment.newInstance(getResources().getString(R.string.check_your_internet_connection));
-      //      getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, errorMessageFragment).commit();
-      //  } else {
+        if (UtilsHelper.isNetworkConnectionAvailable(getApplicationContext())) {
             weatherFragment = WeatherFragment.newInstance(cityName);
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, weatherFragment, WEATHER_FRAGMENT_TAG).
                     commit();
-      //  }
+        } else {
+            errorFragment = ErrorFragment.newInstance("No internet connection");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, errorFragment, ERROR_FRAGMENT_TAG).
+                    commit();
+        }
+
+    }
+
+
+    @Override
+    public void onRetryClicked() {
+        attachFragment();
     }
 }
