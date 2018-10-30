@@ -16,7 +16,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherHolder> {
     private Forecast forecast;
     private OnItemClickListener listener;
 
-    public WeatherAdapter(Forecast forecast){
+    public WeatherAdapter(Forecast forecast) {
         this.forecast = forecast;
     }
 
@@ -25,7 +25,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherHolder> {
     public WeatherHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         // Inflate the custom layout
-        View  v = inflater.inflate(R.layout.item_forcast_days, viewGroup, false);
+        View v = inflater.inflate(R.layout.item_forcast_days, viewGroup, false);
         // Return a new holder instance
         return new WeatherHolder(v);
     }
@@ -37,7 +37,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherHolder> {
 
     @Override
     public int getItemCount() {
-        return forecast.getForecastday().size();
+        return (forecast.getForecastday() != null) ? forecast.getForecastday().size() : 0;
     }
 
     public Forecast getForecast() {
