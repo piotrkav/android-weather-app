@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 
 import com.example.piotr.pl5_task.R;
 import com.example.piotr.pl5_task.adpater.WeatherAdapter;
@@ -25,6 +27,8 @@ public class WeatherFragment extends Fragment {
     private static final String CITY_NAME = "city";
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
+    @BindView(R.id.city_temp)
+    TextView cityTemperature;
 
     private Weather weather;
     private WeatherAdapter weatherAdapter;
@@ -59,6 +63,7 @@ public class WeatherFragment extends Fragment {
         }
         if (weather != null) {
             fetchList();
+            cityTemperature.setText(String.format("%s°C", weather.getCurrent().getTempC().toString()));
         } else {
             Log.d("Error: ", "Weather was not fetched...");
         }
